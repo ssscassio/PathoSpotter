@@ -20,23 +20,22 @@ import copy
 matplotlib.rcParams['font.size'] = 12
 
 #Functions Block
-
     #CanalExtration:
     #Parametros: Img= Imagem a ser processada, name= nome do colorspace
 def canalExtration(img, name):
     fig, axes = plt.subplots(2, 2, figsize=(7, 6))
     ax0, ax1, ax2, ax3 = axes.ravel()
 
-    ax0.imshow(img)
+    ax0.imshow(img,)
     ax0.set_title("Original image " + name)
 
-    ax1.imshow(img[:, :, 0], )
+    ax1.imshow(img[:, :, 0])
     ax1.set_title("Channel 1 " + name)
 
-    ax2.imshow(img[:, :, 1], )
+    ax2.imshow(img[:, :, 1])
     ax2.set_title("Channel 2 "  + name)
 
-    ax3.imshow(img[:, :, 2], )
+    ax3.imshow(img[:, :, 2])
     ax3.set_title("Channel 3 "  + name)
 
     for ax in axes.ravel(): #Removing Axis
@@ -50,9 +49,18 @@ def canalExtration(img, name):
     #Parametros: Img= Imagem a ser processada, name= nome do colorspace, min=valor minimo das camadas, max= valor maximo das camadas
 def histogramPlot(img, name, min, max):
 
-    img1 = copy.copy(img[:,:,0])
+    img1 = copy.copy(img[:,:,0])#Teste: Trocar numeros por ":"
     img2 = copy.copy(img[:,:,1])
     img3 = copy.copy(img[:,:,2])
+
+    #Teste: Removendo os outros canais.
+    """img1[:,:,1] = 0
+    img1[:,:,2] = 0
+    img2[:,:,0] = 0
+    img2[:,:,2] = 0
+    img3[:,:,0] = 0
+    img3[:,:,1] = 0
+    """
 
     hist1 = np.histogram(img1, bins=np.arange(min, max))
     hist2 = np.histogram(img2, bins=np.arange(min, max))
@@ -104,7 +112,6 @@ io.imsave("image_rgb_cie.jpg", img_rgb_cie, )
 io.imsave("image_xyz.jpg", img_xyz, )
 """
 #Layers Block
-
 """
 canalExtration(img_rgb, "RGB").show()
 canalExtration(img_hsv, "HSV").show()
@@ -114,6 +121,7 @@ canalExtration(img_luv, "LUV").show()
 canalExtration(img_rgb_cie, "RGB_CIE").show()
 canalExtration(img_xyz, "XYZ").show()
 """
+
 # B&W Convert Block
 
 
