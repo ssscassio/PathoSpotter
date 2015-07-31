@@ -145,10 +145,13 @@ def extrairmagenta(img):
 
 
     return plt #ainda nao sei por qual motivo, retorne isso
+    		"""Você ta retornando isso porque você está usando o .show() do plot na função principal"""
+    		"""Alternativamente a isso você poderia usar plt.sho() dentro da função extrairmagenta(img)
+    			e apenas chamar a função no bloco principal"""
 
 def contarpixel(img):
 	return
 def equalizarhistograma():
 	return
-extrairmagenta(img).show()
+extrairmagenta(img).show() #Aqui, você está exibindo a plotagem que foi criada e retornada pela função
 
