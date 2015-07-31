@@ -1,0 +1,154 @@
+#Imports Block
+from skimage import data
+from pylab import * #uint8, float64
+import numpy as np
+from skimage import img_as_ubyte
+from skimage import img_as_float
+from matplotlib import pyplot as plt
+from scipy import ndimage
+from skimage import color
+from skimage.filters import threshold_otsu, sobel #Binarization
+from skimage.restoration import denoise_tv_chambolle #Suavization Filters
+from skimage import img_as_ubyte
+from skimage.morphology import watershed
+from skimage import io
+from skimage import exposure #histograma
+from PIL import Image, ImageOps
+from matplotlib import pyplot
+import copy
+from skimage import exposure
+
+matplotlib.rcParams['font.size'] = 12
+
+#Functions Block
+
+    #CanalExtration:
+    #Parametros: Img= Imagem a ser processada, name= nome do colorspace
+
+#Input's Block
+
+    #Single Reader
+img = data.imread('1c.jpg', False,)
+    #Set Reader
+
+#Convert Block
+"""
+img_rgb = color.convert_colorspace(img, 'RGB', 'RGB') #No need
+img_hsv = color.convert_colorspace(img_rgb, 'RGB', 'HSV')
+img_lab = color.rgb2lab(img_rgb)
+img_hed = color.rgb2hed(img_rgb)
+img_luv = color.rgb2luv(img_rgb)
+img_rgb_cie = color.convert_colorspace(img_rgb, 'RGB', 'RGB CIE')
+img_xyz = color.rgb2xyz(img_rgb)
+img_gray = color.rgb2grey(img_rgb)
+"""
+
+def converting2cmy(r, g, b):
+    cmyk_scale = 100
+    if (r == 0) and (g == 0) and (b == 0):
+        # black
+        return 0, 0, 0, cmyk_scale
+
+    # rgb [0,255] -> cmy [0,1]
+    #c = 1 - r / 255.
+    #m = 1 - g / 255.
+    #y = 1 - b / 255.
+    c = 255 - r
+    m = 255 - g
+    y = 255 - b
+
+    # extract out k [0,1]
+    #min_cmy = min(c, m, y)
+    #c = (c - min_cmy) / (1 - min_cmy)
+    #m = (m - min_cmy) / (1 - min_cmy)
+    #y = (y - min_cmy) / (1 - min_cmy)
+    #k = min_cmy
+
+    # rescale to the range [0,cmyk_scale]
+    return c, m, y
+
+
+
+def rgb2cmy(img):
+    #a = []
+    #b = []
+    #c = []
+    img2 = copy.copy(img)
+    #img2 = img_as_float(img2)
+    for i in range(img.shape[0]):
+
+        for j in range(img.shape[1]):
+            c, m, y = converting2cmyk(img[i][j][0], img[i][j][1], img[i][j][2])
+            #c = [c, m, y]
+            #b.append(c)
+            img2[i][j][0] = c
+            img2[i][j][1] = m
+            img2[i][j][2] = y
+                    
+        #a.append(b)
+
+
+    return img2
+
+
+
+def juntarcanais(c1, c2):
+
+
+    h = exposure.rescale_intensity(c1, out_range=(0, 1))
+    d = exposure.rescale_intensity(c2, out_range=(0, 1))
+    zdh = np.dstack((np.zeros_like(h), d, h))
+
+    return zdh
+
+
+
+def salvarcombinacoes(img):
+    img_rgb = color.convert_colorspace(img, 'RGB', 'RGB')
+    img_hsv = color.convert_colorspace(img_rgb, 'RGB', 'HSV')
+    img_lab = color.rgb2lab(img_rgb)
+    img_hed = color.rgb2hed(img_rgb)
+    img_luv = color.rgb2luv(img_rgb)
+    img_rgb_cie = color.convert_colorspace(img_rgb, 'RGB', 'RGB CIE')
+    img_xyz = color.rgb2xyz(img_rgb)
+    img_cmy = rgb2cmy(img_rgb)
+
+    lista = [img_rgb, img_hsv, img_lab, img_hed, img_luv, img_rgb_cie, img_xyz, img_cmy]
+    lista2 = ["rgb", "hsv", "lab", "hed", "luv", "rgb_cie", "xyz", "cmy"]
+    for i in range(len(lista)):
+        for j in range(len(lista)):
+            for k in range(3):
+                for l in range(3):
+                    nome = lista2[i] + str(k) + lista2[j] + str(l) + ".jpg"
+                    io.imsave(nome, juntarcanais(lista[i][:, :,k], lista[j][:, :, l]), )
+
+    return
+    
+
+def extrairmagenta(img):
+    """
+    tentar extrair a magenta
+    """
+	
+    bode = rgb2cmy(img)
+    hsv = color.convert_colorspace(img, 'RGB', 'HSV')
+    zdh = juntarcanais(bode[:, :,0], hsv[:, :,1])
+    zdh = color.rgb2gray(zdh)
+    zdh = img_as_ubyte(zdh)
+    mask = zdh < 100
+    zdh[mask] = 0
+
+    #thresh = threshold_otsu(zdh)
+    #binary = thresh < zdh
+
+    io.imshow(zdh)
+
+
+    return plt #ainda nao sei por qual motivo, retorne isso
+
+def contarpixel(img):
+	return
+def equalizarhistograma():
+	return
+extrairmagenta(img).show()
+
