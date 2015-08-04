@@ -49,18 +49,18 @@ def canalExtration(img, name):
     #Parametros: Img= Imagem a ser processada, name= nome do colorspace, min=valor minimo das camadas, max= valor maximo das camadas
 def histogramPlot(img, name, min, max):
 
-    img1 = copy.copy(img[:,:,0])#Teste: Trocar numeros por ":"
-    img2 = copy.copy(img[:,:,1])
-    img3 = copy.copy(img[:,:,2])
+    img1 = copy.copy(img[:,:,:])#Teste: Trocar numeros por ":"
+    img2 = copy.copy(img[:,:,:])
+    img3 = copy.copy(img[:,:,:])
 
     #Teste: Removendo os outros canais.
-    """img1[:,:,1] = 0
+    img1[:,:,1] = 0
     img1[:,:,2] = 0
     img2[:,:,0] = 0
     img2[:,:,2] = 0
     img3[:,:,0] = 0
     img3[:,:,1] = 0
-    """
+    
 
     hist1 = np.histogram(img1, bins=np.arange(min, max))
     hist2 = np.histogram(img2, bins=np.arange(min, max))
