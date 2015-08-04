@@ -150,10 +150,10 @@ def valmax(img):
 def suavizacao(img, m0, m1, m2):
     img2 = copy.copy(img)
 
-    """ 
+    
     x= (255*i)/vmax
     
-    """    
+    
     for i in range(img.shape[0]):
 
         for j in range(img.shape[1]):
@@ -175,13 +175,13 @@ def extrairmagenta(img):
     bode = rgb2cmy(img)
     hsv = color.convert_colorspace(img, 'RGB', 'HSV')
     
-    
+"""    
     mbode0, mbode1, mbode2 = valmax(bode)
     bode = suavizacao(bode, mbode0, mbode1, mbode2)
     
     mhsv0, mhsv1, mhsv2 = valmax(hsv)
     hsv = suavizacao(hsv, mhsv0, mhsv1, mhsv2)
-    
+"""
     zdh = juntarcanais(bode[:, :,0], hsv[:, :,1])
     zdh = color.rgb2gray(zdh)
     zdh = img_as_ubyte(zdh)
