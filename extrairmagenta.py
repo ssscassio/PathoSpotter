@@ -1,3 +1,4 @@
+# coding = UTF-8
 #Imports Block
 from skimage import data
 from pylab import * #uint8, float64
@@ -7,7 +8,7 @@ from skimage import img_as_float
 from matplotlib import pyplot as plt
 from scipy import ndimage
 from skimage import color
-from skimage.filters import threshold_otsu, sobel #Binarization
+from skimage.filter import threshold_otsu, sobel #Binarization
 from skimage.restoration import denoise_tv_chambolle #Suavization Filters
 from skimage import img_as_ubyte
 from skimage.morphology import watershed
@@ -28,7 +29,7 @@ matplotlib.rcParams['font.size'] = 12
 #Input's Block
 
     #Single Reader
-img = data.imread('1c.jpg', False,)
+img = data.imread('img/nor.jpg', False,)
     #Set Reader
 
 #Convert Block
@@ -78,7 +79,7 @@ def rgb2cmy(img):
     for i in range(img.shape[0]):
 
         for j in range(img.shape[1]):
-            c, m, y = converting2cmyk(img[i][j][0], img[i][j][1], img[i][j][2])
+            c, m, y = converting2cmy(img[i][j][0], img[i][j][1], img[i][j][2])
             #c = [c, m, y]
             #b.append(c)
             img2[i][j][0] = c
@@ -124,12 +125,13 @@ def salvarcombinacoes(img):
 
     return
 
+"""
 def valmax(img):
     
     m0= 0
     m1 = 0
     m2 = 0
-    #Bloco para encontrar valor máximo
+    #Bloco para encontrar valor maximo
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
             
@@ -142,9 +144,9 @@ def valmax(img):
         
     
     return m0, m1, m2
-    
-    
+""" 
 
+"""
 def suavizacao(img, m0, m1, m2):
     img2 = copy.copy(img)
 
@@ -164,7 +166,7 @@ def suavizacao(img, m0, m1, m2):
         #a.append(b)
 
     return img2
-
+"""
 def extrairmagenta(img):
     """
     tentar extrair a magenta
@@ -193,9 +195,6 @@ def extrairmagenta(img):
     
 
     return plt #ainda nao sei por qual motivo, retorne isso
-    		"""Você ta retornando isso porque você está usando o .show() do plot na função principal"""
-    		"""Alternativamente a isso você poderia usar plt.sho() dentro da função extrairmagenta(img)
-    			e apenas chamar a função no bloco principal"""
 
 def contarpixel(img):
 	return
@@ -203,5 +202,4 @@ def equalizarhistograma():
 	return
 	
 
-extrairmagenta(img).show() #Aqui, você está exibindo a plotagem que foi criada e retornada pela função
-
+extrairmagenta(img).show()
